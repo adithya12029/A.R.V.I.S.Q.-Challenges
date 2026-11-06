@@ -53,8 +53,8 @@ def list_invoices(tenant=Depends(current_tenant)):
 def tool_get_invoice(body: ToolGetInvoice, tenant=Depends(current_tenant)):
     """Invoice lookup tool used by the assistant."""
     invoice = store.invoices.get(body.invoice_id)
-    if not invoice:
-        raise HTTPException(status_code=404, detail="Invoice not found")
+    if (invoice["tenant_id"]!=tenant["id"]):
+        raise HTTPException(status_code=403, detail="No such invoice is there in your id")
     return invoice
 
 
